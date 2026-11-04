@@ -1,0 +1,336 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="TrueNorthWallet.MainWindow"
+        Title="TrueNorth Wallet" Icon="/Assets/truenorth.png" Width="900" Height="720" MinWidth="760" MinHeight="560"
+        Background="#EEF3F5"
+        FontSize="14"
+        FontFamily="Segoe UI Variable Text, Segoe UI, Inter, Noto Sans, DejaVu Sans">
+
+  <Window.Resources>
+    <SolidColorBrush x:Key="Ink" Color="#12263A"/>
+    <SolidColorBrush x:Key="Steel" Color="#53697A"/>
+    <SolidColorBrush x:Key="Line" Color="#D3DEE4"/>
+    <SolidColorBrush x:Key="Surface" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Hover" Color="#F1F6F8"/>
+    <SolidColorBrush x:Key="Aurora" Color="#1B7F6B"/>
+    <SolidColorBrush x:Key="AuroraHover" Color="#146655"/>
+    <SolidColorBrush x:Key="AuroraBright" Color="#4FD1A5"/>
+  </Window.Resources>
+
+  <Window.Styles>
+    <Style Selector="SelectableTextBlock">
+      <Setter Property="IsTabStop" Value="False"/>
+      <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+    </Style>
+    <Style Selector="SelectableTextBlock.label">
+      <Setter Property="Foreground" Value="{DynamicResource Steel}"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+      <Setter Property="Margin" Value="0,6,0,0"/>
+    </Style>
+    <Style Selector="SelectableTextBlock.muted">
+      <Setter Property="Foreground" Value="{DynamicResource Steel}"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    <Style Selector="SelectableTextBlock.section">
+      <Setter Property="FontSize" Value="17"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+      <Setter Property="Margin" Value="0,22,0,2"/>
+    </Style>
+    <Style Selector="SelectableTextBlock.balance">
+      <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI, Inter, Noto Sans, DejaVu Sans"/>
+      <Setter Property="FontSize" Value="46"/>
+      <Setter Property="FontWeight" Value="Light"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style Selector="Border.panel">
+      <Setter Property="Background" Value="{DynamicResource Surface}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="10"/>
+      <Setter Property="Padding" Value="30"/>
+      <Setter Property="Margin" Value="12"/>
+    </Style>
+    <Style Selector="StackPanel.page">
+      <Setter Property="Spacing" Value="8"/>
+      <Setter Property="MaxWidth" Value="560"/>
+      <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+
+    <Style Selector="TabControl">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Padding" Value="0"/>
+    </Style>
+    <Style Selector="TabItem">
+      <Setter Property="FontSize" Value="15"/>
+      <Setter Property="Padding" Value="18,11"/>
+      <Setter Property="MinWidth" Value="140"/>
+      <Setter Property="Foreground" Value="{DynamicResource Steel}"/>
+    </Style>
+    <Style Selector="TabItem:pointerover">
+      <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+    </Style>
+    <Style Selector="TabItem:selected">
+      <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style Selector="TabItem:selected /template/ Rectangle#PART_SelectedPipe">
+      <Setter Property="Fill" Value="{DynamicResource Aurora}"/>
+    </Style>
+
+    <Style Selector="Button">
+      <Setter Property="Background" Value="{DynamicResource Surface}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Padding" Value="16,9"/>
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource Hover}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Steel}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{DynamicResource Aurora}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Aurora}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AuroraHover}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource AuroraHover}"/>
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Padding" Value="10,8"/>
+      <Setter Property="MinHeight" Value="38"/>
+    </Style>
+    <Style Selector="TextBox.mono">
+      <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, DejaVu Sans Mono, Menlo, monospace"/>
+      <Setter Property="FontSize" Value="13"/>
+    </Style>
+    <Style Selector="ComboBox">
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="Padding" Value="10,8"/>
+    </Style>
+  </Window.Styles>
+
+  <Grid>
+
+    <TabControl x:Name="Tabs" TabStripPlacement="Left" Margin="8">
+
+      <TabItem Header="Overview" Margin="0,146,0,0">
+        <ScrollViewer>
+          <Border Classes="panel">
+            <StackPanel Classes="page">
+              <SelectableTextBlock Text="Balance" Classes="label"/>
+              <SelectableTextBlock x:Name="BalanceText" Text="..." Classes="balance"/>
+              <SelectableTextBlock x:Name="StatusText" Text="" Classes="muted"/>
+              <Button Content="Refresh" Click="RefreshButton_Click" HorizontalAlignment="Left" Margin="0,14,0,0"/>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Receive">
+        <ScrollViewer>
+          <Border Classes="panel">
+            <StackPanel Classes="page">
+              <Border Background="White" BorderBrush="{DynamicResource Line}" BorderThickness="1" CornerRadius="8"
+                      Padding="8" HorizontalAlignment="Left">
+                <Image x:Name="QrImage" Width="200" Height="200"/>
+              </Border>
+              <SelectableTextBlock Text="Your receiving address" Classes="label"/>
+              <TextBox x:Name="AddressBox" IsReadOnly="True" TextWrapping="Wrap" Classes="mono"/>
+              <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                <Button Content="Copy" Click="CopyButton_Click" Classes="primary"/>
+                <Button Content="New address" Click="NewAddressButton_Click"/>
+              </StackPanel>
+
+              <SelectableTextBlock Text="Request a specific amount (optional, in your display unit)" Classes="section"/>
+              <TextBox x:Name="RequestAmountBox"/>
+              <SelectableTextBlock Text="Label (optional)" Classes="label"/>
+              <TextBox x:Name="RequestLabelBox"/>
+              <Button Content="Copy payment link" Click="CopyLinkButton_Click" HorizontalAlignment="Left" Margin="0,4,0,0"/>
+              <SelectableTextBlock x:Name="ReceiveStatus" Text="" Classes="muted"/>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Send">
+        <ScrollViewer>
+          <Border Classes="panel">
+            <StackPanel Classes="page">
+              <SelectableTextBlock Text="Payment link (optional)" Classes="label"/>
+              <TextBox x:Name="LinkBox" PlaceholderText="Paste a truenorth: link"/>
+              <Button Content="Load link" Click="LoadLinkButton_Click" HorizontalAlignment="Left"/>
+              <SelectableTextBlock x:Name="LinkInfoText" Text="" Classes="muted"/>
+
+              <SelectableTextBlock Text="Pay to address" Classes="label" Margin="0,14,0,0"/>
+              <TextBox x:Name="SendAddressBox" PlaceholderText="Paste the recipient address" Classes="mono"/>
+              <SelectableTextBlock x:Name="AmountLabel" Text="Amount (NORTH)" Classes="label"/>
+              <TextBox x:Name="SendAmountBox"/>
+              <SelectableTextBlock Text="Wallet passphrase (leave empty if the wallet is not encrypted)" Classes="label"/>
+              <TextBox x:Name="PassphraseBox" PasswordChar="*"/>
+              <Button Content="Send" Click="SendButton_Click" Classes="primary" HorizontalAlignment="Left" Margin="0,8,0,0"/>
+              <SelectableTextBlock x:Name="SendStatus" Text="" Classes="muted"/>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="History">
+        <Border Classes="panel">
+          <DockPanel>
+            <Button DockPanel.Dock="Top" Content="Refresh" Click="RefreshButton_Click" HorizontalAlignment="Left" Margin="0,0,0,12"/>
+            <StackPanel DockPanel.Dock="Bottom" Spacing="8" Margin="0,14,0,0">
+              <SelectableTextBlock Text="Speed up an unconfirmed payment" Classes="section" Margin="0,0,0,2"/>
+              <ComboBox x:Name="BumpBox" HorizontalAlignment="Stretch"/>
+              <SelectableTextBlock Text="Wallet passphrase (leave empty if the wallet is not encrypted)" Classes="label"/>
+              <TextBox x:Name="BumpPassBox" PasswordChar="*"/>
+              <SelectableTextBlock Text="New fee rate in miettes per byte (leave empty to raise the current rate by 1)" Classes="label"/>
+              <TextBox x:Name="BumpRateBox"/>
+              <Button Content="Bump fee" Click="BumpButton_Click" Classes="primary" HorizontalAlignment="Left"/>
+              <SelectableTextBlock x:Name="BumpStatus" Text="" Classes="muted"/>
+            </StackPanel>
+            <TextBox x:Name="HistoryBox" IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap" Classes="mono"/>
+          </DockPanel>
+        </Border>
+      </TabItem>
+
+      <TabItem Header="Offline">
+        <ScrollViewer>
+          <Border Classes="panel">
+            <StackPanel Classes="page">
+              <SelectableTextBlock Text="1. Export public descriptors (use the wallet that holds the keys)" Classes="section" Margin="0,0,0,2"/>
+              <Button Content="Export public descriptors" Click="ExportDescriptorsButton_Click" HorizontalAlignment="Left"/>
+              <TextBox x:Name="ExportBox" AcceptsReturn="True" TextWrapping="Wrap" Height="90" Classes="mono"/>
+              <Button Content="Copy" Click="CopyExportButton_Click" HorizontalAlignment="Left"/>
+              <SelectableTextBlock x:Name="ExportStatus" Text="" Classes="muted"/>
+
+              <SelectableTextBlock Text="2. Create a watch-only wallet" Classes="section"/>
+              <SelectableTextBlock Text="Name for the new wallet" Classes="label"/>
+              <TextBox x:Name="WatchNameBox"/>
+              <SelectableTextBlock Text="Paste the exported descriptors" Classes="label"/>
+              <TextBox x:Name="ImportBox" AcceptsReturn="True" TextWrapping="Wrap" Height="90" Classes="mono"/>
+              <Button Content="Create watch-only wallet" Click="CreateWatchButton_Click" Classes="primary" HorizontalAlignment="Left"/>
+              <SelectableTextBlock x:Name="WatchStatus" Text="" Classes="muted"/>
+
+              <SelectableTextBlock Text="3. Prepare a payment (use the watch-only wallet)" Classes="section"/>
+              <SelectableTextBlock Text="Pay to address" Classes="label"/>
+              <TextBox x:Name="PsbtAddressBox" Classes="mono"/>
+              <SelectableTextBlock Text="Amount (in your display unit, NORTH or miettes)" Classes="label"/>
+              <TextBox x:Name="PsbtAmountBox"/>
+              <Button Content="Create unsigned payment" Click="CreatePsbtButton_Click" HorizontalAlignment="Left"/>
+
+              <SelectableTextBlock Text="4. Review, sign and send" Classes="section"/>
+              <TextBox x:Name="PsbtBox" AcceptsReturn="True" TextWrapping="Wrap" Height="120" Classes="mono"/>
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Copy" Click="CopyPsbtButton_Click"/>
+                <Button Content="Review" Click="InspectPsbtButton_Click"/>
+              </StackPanel>
+              <SelectableTextBlock Text="Wallet passphrase for signing (leave empty if not encrypted)" Classes="label"/>
+              <TextBox x:Name="PsbtPassBox" PasswordChar="*"/>
+              <Button Content="Sign (use the wallet that holds the keys)" Click="SignPsbtButton_Click" HorizontalAlignment="Left"/>
+              <CheckBox x:Name="PsbtCheckBox" Content="I have checked the recipients and amounts" Margin="0,8,0,0"/>
+              <Button Content="Finalize and broadcast" Click="BroadcastPsbtButton_Click" Classes="primary" HorizontalAlignment="Left"/>
+              <SelectableTextBlock x:Name="PsbtStatus" Text="" Classes="muted"/>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Security">
+        <ScrollViewer>
+          <Border Classes="panel">
+            <StackPanel Classes="page">
+              <SelectableTextBlock x:Name="WalletStateText" Text="..." FontSize="17" FontWeight="SemiBold" TextWrapping="Wrap"/>
+              <SelectableTextBlock Text="New passphrase (at least 8 characters)" Classes="label" Margin="0,14,0,0"/>
+              <TextBox x:Name="NewPassBox" PasswordChar="*"/>
+              <SelectableTextBlock Text="Repeat new passphrase" Classes="label"/>
+              <TextBox x:Name="NewPassBox2" PasswordChar="*"/>
+              <SelectableTextBlock Text="Current passphrase (only needed to change it)" Classes="label"/>
+              <TextBox x:Name="OldPassBox" PasswordChar="*"/>
+              <CheckBox x:Name="UnderstandBox" Content="I understand that a lost passphrase cannot be recovered" Margin="0,10,0,0"/>
+              <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,6,0,0">
+                <Button Content="Encrypt wallet" Click="EncryptButton_Click" Classes="primary"/>
+                <Button Content="Change passphrase" Click="ChangePassButton_Click"/>
+                <Button Content="Lock now" Click="LockButton_Click"/>
+              </StackPanel>
+              <SelectableTextBlock x:Name="SecurityStatus" Text="" Classes="muted"/>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="Settings">
+        <ScrollViewer>
+          <Border Classes="panel">
+            <StackPanel Classes="page">
+              <SelectableTextBlock Text="Node connection" FontSize="17" FontWeight="SemiBold"/>
+              <SelectableTextBlock Text="Network" Classes="label" Margin="0,10,0,0"/>
+              <ComboBox x:Name="NetworkBox" HorizontalAlignment="Stretch" SelectionChanged="NetworkBox_SelectionChanged">
+                <ComboBoxItem Content="Mainnet (port 9554)"/>
+                <ComboBoxItem Content="Testnet4 (port 49554)"/>
+                <ComboBoxItem Content="Regtest (port 18443)"/>
+              </ComboBox>
+              <SelectableTextBlock Text="Host" Classes="label"/>
+              <TextBox x:Name="HostBox"/>
+              <SelectableTextBlock Text="Port" Classes="label"/>
+              <TextBox x:Name="PortBox"/>
+              <SelectableTextBlock Text="RPC username" Classes="label"/>
+              <TextBox x:Name="UserBox"/>
+              <SelectableTextBlock Text="RPC password" Classes="label"/>
+              <TextBox x:Name="RpcPasswordBox" PasswordChar="*"/>
+              <CheckBox x:Name="RememberPassBox" Content="Remember this password on this computer (saved unencrypted)"/>
+              <SelectableTextBlock Text="Cookie file (recommended: no password is stored)" Classes="label"/>
+              <TextBox x:Name="CookieBox" Classes="mono"/>
+              <SelectableTextBlock Text="Wallet name (leave empty for the node's default wallet)" Classes="label"/>
+              <TextBox x:Name="WalletBox"/>
+              <SelectableTextBlock Text="Display unit" Classes="label"/>
+              <ComboBox x:Name="UnitBox" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="NORTH (8 decimals)"/>
+                <ComboBoxItem Content="miettes, 1 NORTH = 100,000,000"/>
+              </ComboBox>
+              <Button Content="Save and test connection" Click="SaveSettingsButton_Click" Classes="primary" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+              <SelectableTextBlock x:Name="SettingsStatus" Text="" Classes="muted"/>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </TabItem>
+
+    </TabControl>
+    <!-- logo-overlay -->
+    <Image Source="/Assets/logo-leaf.png" Width="112" Height="112" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,22,0,0" IsHitTestVisible="False"/>
+    <!-- /logo-overlay -->
+    <!-- network-badge -->
+    <Border x:Name="NetworkBadge" IsVisible="False" IsHitTestVisible="False" Background="#E9B949" CornerRadius="6" Padding="10,6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="22,0,0,22">
+      <StackPanel Spacing="1">
+        <TextBlock x:Name="NetworkBadgeText" Text="" FontSize="13" FontWeight="Bold" Foreground="#12263A"/>
+        <TextBlock Text="Coins have no value" FontSize="11" Foreground="#12263A"/>
+      </StackPanel>
+    </Border>
+    <!-- /network-badge -->
+  </Grid>
+</Window>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
