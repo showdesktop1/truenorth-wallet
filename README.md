@@ -8,6 +8,8 @@
 
 > **Early release.** The wallet has not been audited and has not been used on mainnet. Try it on a test network first, and do not use it with funds you cannot afford to lose.
 
+This is an independent project and not an official TrueNorth wallet.
+
 ## Download
 
 Get the latest version from the [Releases page](https://github.com/showdesktop1/truenorth-wallet/releases).
@@ -43,7 +45,7 @@ The wallet holds no keys and no blockchain data of its own. It connects to your 
 
 ## Quick start
 
-1. **Run a TrueNorth node** with RPC enabled (`server=1`). See the [node repository](https://github.com/truenorth-project/truenorth) for how to build and run it, and `doc/testnet.md` there for the test networks.
+1. **Run a TrueNorth node** with RPC enabled (`server=1`). See the [node repository](https://github.com/truenorth-project/truenorth) for how to build and run it, and `doc/testnet.md` there for the test networks. On node version 30.5.2 and earlier, a fresh testnet4 node finds no peers unless you add `addnode=seed.nyc.tncoin.xyz:49555` to its config, even though the doc says otherwise. The maintainers have confirmed this and plan a fix in 30.5.3.
 2. **Start the wallet**, then open **Settings**.
 3. **Choose the network**, enter your **wallet name**, and set **Cookie file** to the `.cookie` file in your node's data folder. Press **Save and test connection**.
 
@@ -84,4 +86,5 @@ On Linux, install the libraries listed above first.
 ## License
 
 The source code is released under the license in the [LICENSE](LICENSE) file. The logo and icon are used with permission and are not covered by that license.
+
 
