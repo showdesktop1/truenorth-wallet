@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace TrueNorthWallet;
 
@@ -10,6 +11,12 @@ public class PaymentRequest
     public decimal? Amount { get; set; }   // in NORTH
     public string Label { get; set; } = "";
     public string Message { get; set; } = "";
+
+    // The largest amount a link may ask for, in NORTH (MAX_MONEY in the node's src/consensus/amount.h)
+    private const decimal MaxNorth = 10000000000m;
+
+    // digits, then an optional dot and 1 to 8 digits: no leading or trailing dot, no signs, no exponent
+    private static readonly Regex AmountPattern = new Regex(@"^[0-9]+(\.[0-9]{1,8})?\z", RegexOptions.Compiled);
 
     public static bool TryParse(string? text, out PaymentRequest request, out string error)
     {
@@ -39,19 +46,32 @@ public class PaymentRequest
         }
         request.Address = address;
 
+        var seen = new HashSet<string>();
         foreach (var part in query.Split('&', StringSplitOptions.RemoveEmptyEntries))
         {
             var eq = part.IndexOf('=');
             var key = (eq >= 0 ? part.Substring(0, eq) : part).ToLowerInvariant();
             var value = eq >= 0 ? Uri.UnescapeDataString(part.Substring(eq + 1)) : "";
 
+            if ((key == "amount" || key == "label" || key == "message") && !seen.Add(key))
+            {
+                error = "The link repeats the " + key + " parameter, so it was not loaded.";
+                return false;
+            }
+
             switch (key)
             {
                 case "amount":
-                    if (!decimal.TryParse(value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var amount)
-                        || amount <= 0 || decimal.Round(amount, 8) != amount)
+                    if (!AmountPattern.IsMatch(value)
+                        || !decimal.TryParse(value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var amount)
+                        || amount <= 0)
                     {
                         error = "The amount in the link is not valid.";
+                        return false;
+                    }
+                    if (amount > MaxNorth)
+                    {
+                        error = "The amount in the link is larger than the maximum possible amount.";
                         return false;
                     }
                     request.Amount = amount;
@@ -83,4 +103,3 @@ public class PaymentRequest
         return "truenorth:" + Address + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
     }
 }
-
