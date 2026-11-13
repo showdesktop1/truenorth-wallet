@@ -37,6 +37,7 @@ Get the latest version from the [Releases page](https://github.com/showdesktop1/
 - **History** with fee bumping for unconfirmed payments, either automatic or at a fee rate you choose
 - **Security**: wallet encryption, passphrase change and lock, and cookie authentication so no password has to be stored
 - **Watch-only wallets and PSBTs**: prepare a payment on one wallet, sign it on another, then broadcast
+- **Restore from recovery words**: bring back coins from 12 recovery words (for example from IronMiner's address setup) into a new encrypted wallet on your node
 - **NORTH or miettes** (1 NORTH = 100,000,000 miettes), with amounts checked strictly so a misplaced comma can never change a payment
 - **Test networks** are marked on every screen, so test coins are never mistaken for real ones
 - **One window**: opening a `truenorth:` link while the wallet is running fills in the Send screen of the open copy
