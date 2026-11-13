@@ -262,6 +262,54 @@ public partial class MainWindow : Window
         }
     }
 
+    private async void RestoreButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var name = RestoreNameBox.Text?.Trim() ?? "";
+        var pass = RestorePassBox.Text ?? "";
+        if (name.Length == 0)
+        {
+            RestoreStatus.Text = "Enter a name for the restored wallet.";
+            return;
+        }
+        var words = RecoveryWords.Normalize(RestoreWordsBox.Text ?? "");
+        var problem = RecoveryWords.Check(words);
+        if (problem != null)
+        {
+            RestoreStatus.Text = problem;
+            return;
+        }
+        if (pass.Length < 8)
+        {
+            RestoreStatus.Text = "The passphrase must be at least 8 characters.";
+            return;
+        }
+        if (pass != (RestorePassBox2.Text ?? ""))
+        {
+            RestoreStatus.Text = "The two passphrases do not match.";
+            return;
+        }
+        if (RestoreUnderstandBox.IsChecked != true)
+        {
+            RestoreStatus.Text = "Tick the box to confirm you understand the passphrase cannot be recovered.";
+            return;
+        }
+
+        try
+        {
+            var address = await RecoveryWords.RestoreAsync(CreateClientFor, name, words, pass, msg => RestoreStatus.Text = msg);
+            RestoreWordsBox.Text = "";
+            RestorePassBox.Text = "";
+            RestorePassBox2.Text = "";
+            RestoreUnderstandBox.IsChecked = false;
+            RestoreStatus.Text = $"Wallet '{name}' restored. Its first address is\n{address}\n"
+                + "Check that this is the address you had. To use the wallet, set the wallet name in Settings to " + name + ".";
+        }
+        catch (Exception ex)
+        {
+            RestoreStatus.Text = "Error: " + ex.Message;
+        }
+    }
+
     private async void LockButton_Click(object? sender, RoutedEventArgs e)
     {
         try

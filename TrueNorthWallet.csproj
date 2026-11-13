@@ -21,6 +21,8 @@
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <!-- The BIP39 English word list (bitcoin/bips, SHA-256 2f5eed53...24dbda) -->
+    <EmbeddedResource Include="bip39-english.txt" LogicalName="TrueNorthWallet.bip39-english.txt" />
   </ItemGroup>
 </Project>
 
